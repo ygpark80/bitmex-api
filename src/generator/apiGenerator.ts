@@ -1,5 +1,5 @@
 import { path } from 'app-root-path';
-import request from 'request';
+import axios from 'axios';
 import { SwaggerParser, CONTAINER } from './SwaggerParser';
 import { TSWriter } from './TSWriter';
 
@@ -13,10 +13,12 @@ const HEADER = `
 
     // tslint:disable:max-line-length`;
 
-request.get(SWAGGER, async (err, res, body) => {
+(async () => {
+    const response = await axios.get(SWAGGER);
     // tslint:disable-next-line:no-console
-    if (err) { return console.log(err); }
-    const data = JSON.parse(body);
+    // if (err) { return console.log(err); }
+
+    const data = response.data;
     const swagger = new SwaggerParser(data);
 
     await TSWriter(outputInterfaces, `
@@ -31,4 +33,4 @@ request.get(SWAGGER, async (err, res, body) => {
     export class BitmexAPI extends BitmexAbstractAPI {
     ${ swagger.createClass() }
     }`);
-});
+})();

@@ -1,4 +1,4 @@
-import request from 'request';
+import axios from 'axios';
 import { parse as urlParse } from 'url';
 
 import { getAuthHeaders } from '../common/BitmexAuth';
@@ -51,11 +51,13 @@ export abstract class BitmexAbstractAPI {
             ...opts
         };
 
+        console.log("options=", options)
+
         const timeout = this.getRateLimitTimeout();
         return new Promise<T>((resolve, reject) => {
             setTimeout(() => {
-                request(options, (error, response, body) => {
-                    if (error) { return reject(error); }
+                axios(options).then((response) => {
+                    // if (error) { return reject(error); }
 
                     this.ratelimit = {
                         limit: parseInt(<string>response.headers['x-ratelimit-limit'], 10),
@@ -63,9 +65,9 @@ export abstract class BitmexAbstractAPI {
                         reset: parseInt(<string>response.headers['x-ratelimit-reset'], 10) * 1000
                     };
 
-                    if (body.error) { return reject(body.error); }
+                    // if (body.error) { return reject(body.error); }
 
-                    resolve(body);
+                    resolve(response.data);
                 });
             }, timeout);
         });
