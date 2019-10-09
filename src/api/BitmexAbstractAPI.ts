@@ -18,7 +18,7 @@ export abstract class BitmexAbstractAPI {
     constructor(options: BitmexOptions = {}) {
         const proxy = options.proxy || '';
         this.host = !!options.testnet ?
-          `${proxy}https://testnet.bitmex.com` : `${proxy}https://www.bitmex.com`;
+            `${proxy}https://testnet.bitmex.com` : `${proxy}https://www.bitmex.com`;
         this.apiKeyID = options.apiKeyID || null;
         this.apiKeySecret = options.apiKeySecret || null;
     }
@@ -28,11 +28,11 @@ export abstract class BitmexAbstractAPI {
         return rate != null && rate.remaining <= 0 ? Math.max(rate.reset - new Date().valueOf(), 0) : 0;
     }
 
-    protected async request<T>(method: APIMethods , endpoint: string, opts: { qs?: any; form?: any; } , auth = false) {
+    protected async request<T>(method: APIMethods, endpoint: string, opts: { qs?: any; form?: any; }, auth = false) {
         if (opts.qs && Object.keys(opts.qs).length === 0) { delete opts.qs; }
         if (opts.form && Object.keys(opts.form).length === 0) { delete opts.form; }
 
-        const url = `${ this.host }${this.basePath}${endpoint}`;
+        const url = `${this.host}${this.basePath}${endpoint}`;
         const path = urlParse(url).pathname || '';
 
         const headers = auth ? getAuthHeaders({
@@ -51,24 +51,20 @@ export abstract class BitmexAbstractAPI {
         };
 
         const timeout = this.getRateLimitTimeout();
-        return new Promise<T>((resolve, reject) => {
-            setTimeout(async () => {
-                try {
-                    const response = await axios(options);
+        if (timeout > 0) { await this.timeout(timeout); }
 
-                    this.ratelimit = {
-                        limit: parseInt(<string>response.headers['x-ratelimit-limit'], 10),
-                        remaining: parseInt(<string>response.headers['x-ratelimit-remaining'], 10),
-                        reset: parseInt(<string>response.headers['x-ratelimit-reset'], 10) * 1000
-                    };
+        const response = await axios(options);
 
-                    // if (body.error) { return reject(body.error); }
+        this.ratelimit = {
+            limit: parseInt(<string>response.headers['x-ratelimit-limit'], 10),
+            remaining: parseInt(<string>response.headers['x-ratelimit-remaining'], 10),
+            reset: parseInt(<string>response.headers['x-ratelimit-reset'], 10) * 1000
+        };
 
-                    resolve(response.data);
-                } catch (error) {
-                    return reject(error);
-                }
-            }, timeout);
-        });
+        return response.data;
+    }
+
+    private timeout(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
