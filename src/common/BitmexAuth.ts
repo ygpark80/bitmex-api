@@ -1,4 +1,4 @@
-import { createHmac } from 'crypto';
+import { HmacSHA256 } from 'crypto-js';
 import { stringify } from 'querystring';
 
 interface IAuthHeaders {
@@ -18,7 +18,7 @@ export function getAuthHeaders({ apiKeyID, apiKeySecret, opts, method, path }: I
     if (opts.qs) { path += '?' + stringify(opts.qs); }
     const data = opts.form ? stringify(opts.form) : '';
     const nonce = generateNonce();
-    const signature = createHmac('sha256', apiKeySecret).update(method + path.substring(path.indexOf("/api")) + nonce + data).digest('hex');
+    const signature = HmacSHA256(method + path.substring(path.indexOf('/api')) + nonce + data, apiKeySecret);
     return {
         'api-expires': nonce,
         'api-key': apiKeyID,
@@ -28,7 +28,7 @@ export function getAuthHeaders({ apiKeyID, apiKeySecret, opts, method, path }: I
 
 export function getWSAuthQuery(apiKeyID: string, apiKeySecret: string) {
     const nonce = generateNonce();
-    const signature = createHmac('sha256', apiKeySecret).update('GET/realtime' + nonce).digest('hex');
+    const signature = HmacSHA256('GET/realtime' + nonce, apiKeySecret).toString();
     return stringify({
         'api-nonce': nonce,
         'api-key': apiKeyID,

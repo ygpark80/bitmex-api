@@ -7,9 +7,9 @@ class TestSuite {
     @test
     async someTest() {
         const api = new BitmexAPI({ testnet: false })
-        const indices = await api.Chat.getChannels()
-        console.log(indices)
-        expect(indices.length).toBeGreaterThan(0)
+        const channels = await api.Chat.getChannels()
+        console.log(channels)
+        expect(channels.length).toBeGreaterThan(0)
 	}
 	
 }

@@ -47,17 +47,14 @@ export abstract class BitmexAbstractAPI {
             method,
             url,
             headers,
-            json: true,
             ...opts
         };
 
-        console.log("options=", options)
-
         const timeout = this.getRateLimitTimeout();
         return new Promise<T>((resolve, reject) => {
-            setTimeout(() => {
-                axios(options).then((response) => {
-                    // if (error) { return reject(error); }
+            setTimeout(async () => {
+                try {
+                    const response = await axios(options);
 
                     this.ratelimit = {
                         limit: parseInt(<string>response.headers['x-ratelimit-limit'], 10),
@@ -68,7 +65,9 @@ export abstract class BitmexAbstractAPI {
                     // if (body.error) { return reject(body.error); }
 
                     resolve(response.data);
-                });
+                } catch (error) {
+                    return reject(error);
+                }
             }, timeout);
         });
     }
