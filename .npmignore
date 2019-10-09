@@ -1,0 +1,6 @@
+src/
+dist/generator
+dist/test.d.ts             
+dist/test.js
+config*.json
+temp/
