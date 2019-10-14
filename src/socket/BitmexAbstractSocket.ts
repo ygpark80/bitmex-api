@@ -1,5 +1,5 @@
 import { Subscriber, Subject } from 'rxjs/Rx';
-import WebSocket from 'ws';
+import WebSocket from 'isomorphic-ws';
 
 import { getWSAuthQuery } from '../common/BitmexAuth';
 import { ITableMessage } from './ITableMessage';
