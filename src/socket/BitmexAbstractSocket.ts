@@ -41,17 +41,17 @@ export abstract class BitmexAbstractSocket {
             }
         };
 
-        ws.on('open', () => this.syncSubscribers());
+        ws.onopen = () => this.syncSubscribers();
 
-        ws.on('message', (message) => {
+        ws.onmessage = (message) => {
             clearTimeout(ping);
             ping = setTimeout(() => this.send('ping'), PING);
-            if (message === 'pong') { return; }
+            if (message.data === 'pong') { return; }
             const json = JSON.parse(message.toString());
             this.messageHandler(json);
-        });
+        };
 
-        ws.on('error', (err) => debug('error %o', err));
+        ws.onerror = (err) => debug('error %o', err);
     }
 
     private syncSubscribers() {
