@@ -8,7 +8,7 @@ Specifically, `request` and `crypto` was replaced with `axios` and `crypto-js`.
 ## Installation
 
 ```
-yarn add bitmex-api
+yarn add @ygpark80/bitmex-api
 ```
   
 ##  Code Example
