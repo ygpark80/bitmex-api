@@ -1,7 +1,2 @@
 node_modules/
-config*.json
-src/test.ts
-src/test.ts
-dist/test.d.ts
-dist/test.js
-temp/
+dist/

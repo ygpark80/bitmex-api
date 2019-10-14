@@ -14,7 +14,7 @@ yarn add bitmex-api
 ##  Code Example
 
 ```typescript
-import { BitmexAPI } from "bitmex-api"
+import { BitmexAPI } from "@ygpark80/bitmex-api"
 
 const api = new BitmexAPI({
     "apiKeyID": "<YOUR-API-KEY-ID>",

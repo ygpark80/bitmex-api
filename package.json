@@ -1,5 +1,5 @@
 {
-  "name": "bitmex-api",
+  "name": "@ygpark80/bitmex-api",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
