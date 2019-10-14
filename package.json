@@ -7,7 +7,6 @@
   "scripts": {
     "build": "tsc -p src/",
     "clean": "rm -rf dist/",
-    "deploy": "git pull --rebase origin master && git push origin master",
     "major": "npm version major && npm publish",
     "minor": "npm version minor && npm publish",
     "patch": "npm version patch && npm publish",
@@ -17,7 +16,7 @@
     "watch": "npm run build -- --watch",
     "test": "jest"
   },
-  "author": "Ilan Frumer <ilanfrumer@gmail.com>",
+  "author": "YG Park <ygpark80@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "app-root-path": "^2.2.1",
