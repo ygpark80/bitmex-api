@@ -47,7 +47,7 @@ export abstract class BitmexAbstractSocket {
             clearTimeout(ping);
             ping = setTimeout(() => this.send('ping'), PING);
             if (message.data === 'pong') { return; }
-            const json = JSON.parse(message.toString());
+            const json = JSON.parse(message.data.toString());
             this.messageHandler(json);
         };
 
